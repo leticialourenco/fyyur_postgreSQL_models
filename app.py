@@ -146,7 +146,7 @@ def search_venues():
 
 @app.route('/venues/<int:venue_id>')
 def show_venue(venue_id):
-  venue = Venue.query.filter(Venue.id == venue_id).first()
+  venue = Venue.query.filter_by(id=venue_id).first()
   data={
     "id": venue.id,
     "name": venue.name,
@@ -166,9 +166,9 @@ def show_venue(venue_id):
     "past_shows": []
   }
 
-  shows = Show.query.filter(Show.venue_id == venue_id).all()
+  shows = Show.query.filter_by(venue_id=venue.id).all()
   for show in shows:
-    artist = Artist.query.filter(Artist.id == show.artist_id).first()
+    artist = Artist.query.filter_by(id=show.artist_id).first()
     show_info = {
       "artist_id": artist.id,
       "artist_name": artist.name,
@@ -266,7 +266,7 @@ def search_artists():
 
 @app.route('/artists/<int:artist_id>')
 def show_artist(artist_id):
-  artist = Artist.query.filter(Artist.id == artist_id).first()
+  artist = Artist.query.filter_by(id=artist_id).first()
   data = {
     "id": artist.id,
     "name": artist.name,
@@ -285,9 +285,9 @@ def show_artist(artist_id):
     "past_shows": []
   }
 
-  shows = Show.query.filter(Show.venue_id == artist_id).all()
+  shows = Show.query.filter_by(venue_id=artist_id).all()
   for show in shows:
-    venue = Venue.query.filter(Venue.id == show.artist_id).first()
+    venue = Venue.query.filter_by(id=show.artist_id).first()
     show_info = {
       "venue_id": venue.id,
       "venue_name": venue.name,
