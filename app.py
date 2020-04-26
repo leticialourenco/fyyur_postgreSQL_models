@@ -34,6 +34,7 @@ class Venue(db.Model):
     id = db.Column(db.Integer, primary_key=True)
     name = db.Column(db.String, nullable=False)
     seeking = db.Column(db.Boolean, nullable=False, default=False)
+    seeking_message = db.Column(db.String)
     genres = db.Column(db.String, nullable=False)
     city = db.Column(db.String(120), nullable=False)
     state = db.Column(db.String(120), nullable=False)
@@ -50,6 +51,7 @@ class Artist(db.Model):
     id = db.Column(db.Integer, primary_key=True)
     name = db.Column(db.String, nullable=False)
     seeking = db.Column(db.Boolean, nullable=False, default=False)
+    seeking_message = db.Column(db.String)
     genres = db.Column(db.String, nullable=False)
     city = db.Column(db.String(120), nullable=False)
     state = db.Column(db.String(120), nullable=False)
@@ -156,7 +158,7 @@ def show_venue(venue_id):
     "website": venue.website_link,
     "facebook_link": venue.facebook_link,
     "seeking_talent": venue.seeking,
-    "seeking_description": "We are on the lookout for a local artist to play every two weeks. Please call us.",
+    "seeking_description": venue.seeking_message,
     "image_link": venue.image_link,
     "past_shows_count": 0,
     "upcoming_shows_count": 0,
@@ -198,6 +200,7 @@ def create_venue_submission():
 
     name = form.name.data
     seeking = True if form.seeking.data == 'Yes' else False
+    seeking_message = form.seeking_message.data
     genres = form.genres.data
     city = form.city.data
     state = form.state.data
@@ -209,7 +212,8 @@ def create_venue_submission():
 
     venue = Venue(
         name=name, seeking=seeking, genres=genres, city=city, state=state, address=address,
-        phone=phone, website_link=website_link, image_link=image_link, facebook_link=facebook_link
+        phone=phone, website_link=website_link, image_link=image_link, facebook_link=facebook_link,
+        seeking_message=seeking_message
     )
 
     db.session.add(venue)
@@ -273,7 +277,7 @@ def show_artist(artist_id):
     "website": artist.website_link,
     "facebook_link": artist.facebook_link,
     "seeking_venue": artist.seeking,
-    "seeking_description": " Looking for shows to perform at in the San Francisco Bay Area! ",
+    "seeking_description": artist.seeking_message,
     "image_link": artist.image_link,
     "past_shows_count": 0,
     "upcoming_shows_count": 0,
@@ -369,6 +373,7 @@ def create_artist_submission():
 
     name = form.name.data
     seeking = True if form.seeking.data == 'Yes' else False
+    seeking_message = form.seeking_message.data
     genres = form.genres.data
     city = form.city.data
     state = form.state.data
@@ -379,7 +384,8 @@ def create_artist_submission():
 
     artist = Artist(
       name=name, seeking=seeking, genres=genres, city=city, state=state, phone=phone,
-      website_link=website_link, image_link=image_link, facebook_link=facebook_link
+      website_link=website_link, image_link=image_link, facebook_link=facebook_link,
+      seeking_message=seeking_message
     )
 
     db.session.add(artist)

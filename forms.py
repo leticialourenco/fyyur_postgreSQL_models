@@ -1,6 +1,6 @@
 from datetime import datetime
 from flask_wtf import Form
-from wtforms import StringField, SelectField, SelectMultipleField, DateTimeField, BooleanField
+from wtforms import StringField, SelectField, SelectMultipleField, DateTimeField, TextAreaField
 from wtforms.validators import DataRequired, AnyOf, URL
 
 class ShowForm(Form):
@@ -126,6 +126,9 @@ class VenueForm(Form):
             ('No', 'No')
         ]
     )
+    seeking_message = TextAreaField(
+        'seeking_message', render_kw={"rows": 5}
+    )
 
 
 
@@ -238,5 +241,6 @@ class ArtistForm(Form):
             ('No', 'No')
         ]
     )
-
-# TODO IMPLEMENT NEW ARTIST FORM AND NEW SHOW FORM
+    seeking_message = TextAreaField(
+        'seeking_message', render_kw={"rows": 5}
+    )
