@@ -83,7 +83,7 @@ class VenueForm(Form):
         'address', validators=[DataRequired(), Length(max=120)]
     )
     phone = StringField(
-        'phone', validators=[DataRequired(), Length(max=120)]
+        'phone', validators=[DataRequired(), Length(max=120)],
     )
     image_link = StringField(
         'image_link', validators=[URL(), Length(max=500)]
@@ -128,8 +128,6 @@ class VenueForm(Form):
     seeking_message = TextAreaField(
         'seeking_message', render_kw={"rows": 5}, validators=[Length(max=500)]
     )
-
-
 
 class ArtistForm(Form):
     name = StringField(
@@ -198,7 +196,6 @@ class ArtistForm(Form):
         'phone', validators=[DataRequired(), Length(max=120)]
     )
     genres = SelectMultipleField(
-        # TODO implement enum restriction
         'genres', validators=[DataRequired()],
         choices=[
             ('Alternative', 'Alternative'),
@@ -226,7 +223,6 @@ class ArtistForm(Form):
         'image_link', validators=[URL(), Length(max=500)]
     )
     facebook_link = StringField(
-        # TODO implement enum restriction
         'facebook_link', validators=[URL(), Length(max=120)]
     )
     website_link = StringField(

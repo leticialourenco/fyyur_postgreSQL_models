@@ -100,10 +100,13 @@ def venues():
   data, locations = [], []
   venues = Venue.query.all()
 
+  # add to a list unique combinations of city-state
   for venue in venues:
     if venue.city + "-" + venue.state not in locations:
       locations.append(venue.city + "-" + venue.state)
 
+  # add the combinations of city-state to the data list
+  # removing the dash used to concatenate in previous step
   for location in locations:
     data.append({
       "city": location.split("-")[0],
@@ -115,10 +118,12 @@ def venues():
     shows = Show.query.filter_by(venue_id=venue.id).all()
     num_shows = 0
 
+    # check if show is upcoming or past based on today's date
     for show in shows:
       if show.date > datetime.now():
         num_shows += 1
 
+    # add venue details to dict within data to be given to view
     for item in data:
       if venue.city == item['city'] and venue.state == item['state']:
         item['venues'].append({
@@ -133,6 +138,7 @@ def venues():
 def search_venues():
   search_term = request.form.get('search_term', '')
 
+  # filter data containing search term
   venues = Venue.query.filter(Venue.name.ilike(f'%{search_term}%')).all()
   response = {
     "count": 0,
@@ -144,6 +150,7 @@ def search_venues():
     upcoming_shows = 0
     shows = Show.query.filter_by(venue_id=venue.id).all()
 
+    # check if show is upcoming or past based on today's date
     for show in shows:
       if show.date > datetime.now():
         upcoming_shows += 1
@@ -179,6 +186,7 @@ def show_venue(venue_id):
     "past_shows": []
   }
 
+  # populate and loop thru shows in given venue to populate upcoming + past shows feature
   shows = Show.query.filter_by(venue_id=venue.id).all()
   for show in shows:
     artist = Artist.query.filter_by(id=show.artist_id).first()
@@ -189,6 +197,7 @@ def show_venue(venue_id):
       "start_time": str(show.date)
     }
 
+    # check if show is upcoming or past based on today's date
     if show.date > datetime.now():
       data["upcoming_shows"].append(show_info)
       data["upcoming_shows_count"] += 1
@@ -223,6 +232,7 @@ def create_venue_submission():
     image_link = form.image_link.data
     facebook_link = form.facebook_link.data
 
+    # pass form values to populate Venue entry based on its model
     venue = Venue(
         name=name, seeking=seeking, genres=genres, city=city, state=state, address=address,
         phone=phone, website_link=website_link, image_link=image_link, facebook_link=facebook_link,
@@ -263,17 +273,21 @@ def delete_venue(venue_id):
 def artists():
   data = []
   artists = Artist.query.all()
+
+  # populates list of artists dicts
   for artist in artists:
     data.append({
       "id": artist.id,
       "name": artist.name,
     })
+
   return render_template('pages/artists.html', artists=data)
 
 @app.route('/artists/search', methods=['POST'])
 def search_artists():
   search_term = request.form.get('search_term', '')
 
+  # filter results from artist entries that contain the search term
   artists = Artist.query.filter(Artist.name.ilike(f'%{search_term}%')).all()
   response = {
     "count": 0,
@@ -285,6 +299,8 @@ def search_artists():
     upcoming_shows = 0
     shows = Show.query.filter_by(artist_id=artist.id).all()
 
+    # loop through shows to feed the num of upcoming shows key in dict
+    # check to determine if the show has already happened based on current date
     for show in shows:
       if show.date > datetime.now():
         upcoming_shows += 1
@@ -319,6 +335,7 @@ def show_artist(artist_id):
     "past_shows": []
   }
 
+  # loop through shows to determine its category past or upcoming
   shows = Show.query.filter_by(artist_id=artist_id).all()
   for show in shows:
     venue = Venue.query.filter_by(id=show.venue_id).first()
@@ -329,6 +346,7 @@ def show_artist(artist_id):
       "start_time": str(show.date)
     }
 
+    # check to determine if the show has already happened based on current date
     if show.date > datetime.now():
       data["upcoming_shows"].append(show_info)
       data["upcoming_shows_count"] += 1
@@ -358,6 +376,8 @@ def edit_artist(artist_id):
     "seeking_message": data.seeking_message,
   }
 
+  # pre-populate the form with current values of these fields
+  # (other fields' are being handled in the template)
   form.state.process_data(artist['state'])
   form.genres.process_data(artist['genres'])
   form.seeking.process_data('Yes' if artist['seeking'] else 'No')
@@ -382,7 +402,6 @@ def edit_artist_submission(artist_id):
     artist.facebook_link = form.facebook_link.data
 
     db.session.commit()
-
     flash('Artist ' + request.form['name'] + ' was successfully updated!')
   except:
     db.session.rollback()
@@ -412,6 +431,8 @@ def edit_venue(venue_id):
     "seeking_message": data.seeking_message,
   }
 
+  # pre-populate the form with current values of these fields
+  # (other fields' are being handled in the template)
   form.state.process_data(venue['state'])
   form.genres.process_data(venue['genres'])
   form.seeking.process_data('Yes' if venue['seeking'] else 'No')
@@ -436,10 +457,7 @@ def edit_venue_submission(venue_id):
     venue.image_link = form.image_link.data
     venue.facebook_link = form.facebook_link.data
 
-    print(venue)
-
     db.session.commit()
-
     flash('Venue ' + request.form['name'] + ' was successfully updated!')
   except:
     db.session.rollback()
@@ -472,6 +490,7 @@ def create_artist_submission():
     image_link = form.image_link.data
     facebook_link = form.facebook_link.data
 
+    # assign form values to artist obj based on its model
     artist = Artist(
       name=name, seeking=seeking, genres=genres, city=city, state=state, phone=phone,
       website_link=website_link, image_link=image_link, facebook_link=facebook_link,
@@ -514,6 +533,8 @@ def delete_artist(artist_id):
 def shows():
   data = []
   shows = Show.query.all()
+
+  # loop through shows and pick-up relevant data from its related venue and artist
   for show in shows:
     data.append({
       "venue_id": show.venue_id,
@@ -523,6 +544,7 @@ def shows():
       "artist_image_link": Artist.query.filter_by(id=show.artist_id).first().image_link,
       "start_time": format_datetime(str(show.date))
     })
+
   return render_template('pages/shows.html', shows=data)
 
 @app.route('/shows/create')
@@ -540,6 +562,7 @@ def create_show_submission():
     venue_id = form.venue_id.data
     start_time = form.start_time.data
 
+    # use form values to create a show obj based on its model
     show = Show(
       artist_id=artist_id, venue_id=venue_id, date=start_time,
     )
