@@ -1,7 +1,7 @@
 from datetime import datetime
 from flask_wtf import Form
 from wtforms import StringField, SelectField, SelectMultipleField, DateTimeField, TextAreaField
-from wtforms.validators import DataRequired, AnyOf, URL
+from wtforms.validators import DataRequired, AnyOf, URL, Length
 
 class ShowForm(Form):
     artist_id = StringField(
@@ -21,10 +21,10 @@ class VenueForm(Form):
         'name', validators=[DataRequired()]
     )
     city = StringField(
-        'city', validators=[DataRequired()]
+        'city', validators=[DataRequired(), Length(max=120)]
     )
     state = SelectField(
-        'state', validators=[DataRequired()],
+        'state', validators=[DataRequired(), Length(max=120)],
         choices=[
             ('AL', 'AL'),
             ('AK', 'AK'),
@@ -80,16 +80,15 @@ class VenueForm(Form):
         ]
     )
     address = StringField(
-        'address', validators=[DataRequired()]
+        'address', validators=[DataRequired(), Length(max=120)]
     )
     phone = StringField(
-        'phone'
+        'phone', validators=[DataRequired(), Length(max=120)]
     )
     image_link = StringField(
-        'image_link'
+        'image_link', validators=[URL(), Length(max=500)]
     )
     genres = SelectMultipleField(
-        # TODO implement enum restriction
         'genres', validators=[DataRequired()],
         choices=[
             ('Alternative', 'Alternative'),
@@ -114,10 +113,10 @@ class VenueForm(Form):
         ]
     )
     facebook_link = StringField(
-        'facebook_link', validators=[URL()]
+        'facebook_link', validators=[URL(), Length(max=120)]
     )
     website_link = StringField(
-        'website_link', validators=[URL()]
+        'website_link', validators=[URL(), Length(max=120)]
     )
     seeking = SelectField(
         'seeking_talent', validators=[DataRequired()],
@@ -127,7 +126,7 @@ class VenueForm(Form):
         ]
     )
     seeking_message = TextAreaField(
-        'seeking_message', render_kw={"rows": 5}
+        'seeking_message', render_kw={"rows": 5}, validators=[Length(max=500)]
     )
 
 
@@ -137,10 +136,10 @@ class ArtistForm(Form):
         'name', validators=[DataRequired()]
     )
     city = StringField(
-        'city', validators=[DataRequired()]
+        'city', validators=[DataRequired(), Length(max=120)]
     )
     state = SelectField(
-        'state', validators=[DataRequired()],
+        'state', validators=[DataRequired(), Length(max=120)],
         choices=[
             ('AL', 'AL'),
             ('AK', 'AK'),
@@ -196,8 +195,7 @@ class ArtistForm(Form):
         ]
     )
     phone = StringField(
-        # TODO implement validation logic for state
-        'phone'
+        'phone', validators=[DataRequired(), Length(max=120)]
     )
     genres = SelectMultipleField(
         # TODO implement enum restriction
@@ -225,14 +223,14 @@ class ArtistForm(Form):
         ]
     )
     image_link = StringField(
-        'image_link', validators=[URL()]
+        'image_link', validators=[URL(), Length(max=500)]
     )
     facebook_link = StringField(
         # TODO implement enum restriction
-        'facebook_link', validators=[URL()]
+        'facebook_link', validators=[URL(), Length(max=120)]
     )
     website_link = StringField(
-        'website_link', validators=[URL()]
+        'website_link', validators=[URL(), Length(max=120)]
     )
     seeking = SelectField(
         'seeking_venue', validators=[DataRequired()],
@@ -242,5 +240,5 @@ class ArtistForm(Form):
         ]
     )
     seeking_message = TextAreaField(
-        'seeking_message', render_kw={"rows": 5}
+        'seeking_message', render_kw={"rows": 5}, validators=[Length(max=500)]
     )

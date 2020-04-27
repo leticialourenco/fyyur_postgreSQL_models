@@ -32,9 +32,9 @@ class Venue(db.Model):
     __tablename__ = 'venue'
 
     id = db.Column(db.Integer, primary_key=True)
-    name = db.Column(db.String, nullable=False)
+    name = db.Column(db.String(120), nullable=False)
     seeking = db.Column(db.Boolean, nullable=False, default=False)
-    seeking_message = db.Column(db.String)
+    seeking_message = db.Column(db.String(500))
     genres = db.Column(db.String, nullable=False)
     city = db.Column(db.String(120), nullable=False)
     state = db.Column(db.String(120), nullable=False)
@@ -49,9 +49,9 @@ class Artist(db.Model):
     __tablename__ = 'artist'
 
     id = db.Column(db.Integer, primary_key=True)
-    name = db.Column(db.String, nullable=False)
+    name = db.Column(db.String(120), nullable=False)
     seeking = db.Column(db.Boolean, nullable=False, default=False)
-    seeking_message = db.Column(db.String)
+    seeking_message = db.Column(db.String(500))
     genres = db.Column(db.String, nullable=False)
     city = db.Column(db.String(120), nullable=False)
     state = db.Column(db.String(120), nullable=False)
