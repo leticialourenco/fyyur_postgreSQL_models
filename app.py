@@ -319,9 +319,9 @@ def show_artist(artist_id):
     "past_shows": []
   }
 
-  shows = Show.query.filter_by(venue_id=artist_id).all()
+  shows = Show.query.filter_by(artist_id=artist_id).all()
   for show in shows:
-    venue = Venue.query.filter_by(id=show.artist_id).first()
+    venue = Venue.query.filter_by(id=show.venue_id).first()
     show_info = {
       "venue_id": venue.id,
       "venue_name": venue.name,
