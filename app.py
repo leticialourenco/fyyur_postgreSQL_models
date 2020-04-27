@@ -351,16 +351,16 @@ def edit_artist(artist_id):
     "city": data.city,
     "state": data.state,
     "phone": data.phone,
-    "website": data.website_link,
+    "website_link": data.website_link,
     "facebook_link": data.facebook_link,
-    "seeking_venue": data.seeking,
-    "seeking_description": data.seeking_message,
     "image_link": data.image_link,
+    "seeking": data.seeking,
+    "seeking_message": data.seeking_message,
   }
 
   form.state.process_data(artist['state'])
-  form.genres.process_data(artist['genres'])
-  form.seeking.process_data(artist['seeking_venue'])
+  form.seeking.process_data('Yes' if artist['seeking'] else 'No')
+  form.seeking_message.process_data(artist['seeking_message'])
 
   return render_template('forms/edit_artist.html', form=form, artist=artist)
 
@@ -404,16 +404,16 @@ def edit_venue(venue_id):
     "state": data.state,
     "address": data.address,
     "phone": data.phone,
-    "website": data.website_link,
+    "website_link": data.website_link,
     "facebook_link": data.facebook_link,
-    "seeking_talent": data.seeking,
-    "seeking_description": data.seeking_message,
     "image_link": data.image_link,
+    "seeking": data.seeking,
+    "seeking_message": data.seeking_message,
   }
 
   form.state.process_data(venue['state'])
-  form.genres.process_data(venue['genres'])
-  form.seeking.process_data(venue['seeking_talent'])
+  form.seeking.process_data('Yes' if venue['seeking'] else 'No')
+  form.seeking_message.process_data(venue['seeking_message'])
 
   return render_template('forms/edit_venue.html', form=form, venue=venue)
 
