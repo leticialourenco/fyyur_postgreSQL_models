@@ -347,7 +347,7 @@ def edit_artist(artist_id):
   artist = {
     "id": data.id,
     "name": data.name,
-    "genres": data.genres,
+    "genres": data.genres[1:-1].replace('"', '').split(','),
     "city": data.city,
     "state": data.state,
     "phone": data.phone,
@@ -359,6 +359,7 @@ def edit_artist(artist_id):
   }
 
   form.state.process_data(artist['state'])
+  form.genres.process_data(artist['genres'])
   form.seeking.process_data('Yes' if artist['seeking'] else 'No')
   form.seeking_message.process_data(artist['seeking_message'])
 
@@ -399,7 +400,7 @@ def edit_venue(venue_id):
   venue = {
     "id": data.id,
     "name": data.name,
-    "genres": data.genres,
+    "genres": data.genres[1:-1].replace('"', '').split(','),
     "city": data.city,
     "state": data.state,
     "address": data.address,
@@ -412,6 +413,7 @@ def edit_venue(venue_id):
   }
 
   form.state.process_data(venue['state'])
+  form.genres.process_data(venue['genres'])
   form.seeking.process_data('Yes' if venue['seeking'] else 'No')
   form.seeking_message.process_data(venue['seeking_message'])
 
