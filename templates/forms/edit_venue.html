@@ -30,13 +30,29 @@
       <div class="form-group">
         <label for="genres">Genres</label>
         <small>Ctrl+Click to select multiple</small>
-        {{ form.genres(class_ = 'form-control', placeholder='Genres, separated by commas', id=form.state, autofocus = true) }}
+        {{ form.genres(class_ = 'form-control', placeholder='Genres, separated by commas', autofocus = true) }}
       </div>
       <div class="form-group">
-          <label for="genres">Facebook Link</label>
-          {{ form.facebook_link(class_ = 'form-control', placeholder='http://', id=form.state, autofocus = true) }}
-        </div>
-      <input type="submit" value="Edit Venue" class="btn btn-primary btn-lg btn-block">
+          <label for="facebook">Facebook URL</label>
+          {{ form.facebook_link(class_ = 'form-control', placeholder='http://', autofocus = true) }}
+      </div>
+      <div class="form-group">
+          <label for="website">Website URL</label>
+          {{ form.website_link(class_ = 'form-control', placeholder='http://', autofocus = true) }}
+      </div>
+      <div class="form-group">
+          <label for="image">Image URL</label>
+          {{ form.image_link(class_ = 'form-control', placeholder='http://', autofocus = true) }}
+      </div>
+      <div class="form-group">
+          <label for="seeking">Seeking new talent</label>
+          {{ form.seeking(class_ = 'form-control', autofocus = true) }}
+      </div>
+      <div class="form-group">
+          <label for="seeking_message">Message</label>
+          {{ form.seeking_message(class_ = 'form-control', autofocus = true) }}
+      </div>
+      <input type="submit" value="Post Venue" class="btn btn-primary btn-lg btn-block">
     </form>
   </div>
 {% endblock %}
